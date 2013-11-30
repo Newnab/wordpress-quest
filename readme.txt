@@ -1,9 +1,10 @@
 === WordPress Quest ===
 Contributors: Newnab
 Tags: gamification, quests, levels, rules, points, missions
-Requires at least: 3.0.1
+Requires at least: 3.5
 Tested up to: 3.5
 License: GPLv2 or later
+Stable tag: 1.1
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 WordPress Quest allows you to add 'Quests' to your site, granting users points and named achievements for certain interactions
@@ -58,5 +59,7 @@ So, in full, your call to the function might look like:
 
 = 1.0 =
 * First Version
+= 1.1 =
+* Extra rule types and some bug fixes added
 
 

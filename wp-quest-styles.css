@@ -5,3 +5,17 @@
 .wordpress-quest .wp_quest_display_section_title{
 	font-weight:bold;
 }
+
+.wp_quest_popup{
+	display:none;
+	background:#010101;
+	color:#ffffff;
+	border:#fefefe;
+	-moz-box-shadow: -5px -5px 5px #888;
+	-webkit-box-shadow: -5px -5px 5px #888;
+	box-shadow: -5px -5px 5px #888;
+	padding:10px 20px;
+	position:fixed;
+	right:20px;
+	bottom:0px;
+}

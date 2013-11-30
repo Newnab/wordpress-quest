@@ -3,8 +3,8 @@
 Plugin Name: WordPress Quest
 Plugin URI: http://adamburt.com/work/
 Description: WordPress Quest adds quests or achievements to your site based on user interaction. Gamification gathers you more page clicks and reduces bounce rates, and most importantly, it's fun!
-Version: 1.0
-Author: Carbine
+Version: 1.1
+Author: Newnab
 Author URI: http://www.adamburt.com
 License: GPL2
 */
@@ -28,7 +28,7 @@ License: GPL2
 ?>
 <?php
 
-// TODO: (1.1+)
+// TODO: (1.2+)
 // Use PDO rather than MySQL if available. Generally, security needs to be better and there should be less queries.
 
 //Upon activation, create tables
@@ -119,7 +119,7 @@ function register_wp_quest_settings() {
 		register_setting( 'wpq-display-group', 'recent-quest' );
 		register_setting( 'wpq-display-group', 'last-quest' );
 
-		//TODO: Notification defaults
+		//TODO (1.2): Notification defaults
 		/*register_setting( 'wpq-notification-group', 'position' );
 		register_setting( 'wpq-notification-group', 'dfq' );//Default for quest
 		register_setting( 'wpq-notification-group', 'dfl' );//Default for level */
@@ -179,6 +179,8 @@ function wp_quest_rules(){
 		}
 		if(isset($_POST['on-page']) && $_POST['on-page'] != "" && strlen($_POST['on-page'] < 101)){
 			$on_page = $_POST['on-page'];
+		} elseif($_POST['rule_type'] == "login"){
+			$on_page = 0;
 		} else {
 			$error .= "<p>Error: Page not supported.</p>";
 		}
@@ -187,8 +189,7 @@ function wp_quest_rules(){
 		} else {
 			$error .= "<p>Error: Please enter a number (numerically, e.g 1 or 200)</p>";
 		}
-		//TODO (1.3) ALSO VALIDATE FOR
-			//If login rule type, page is irrelevant.
+		//TODO (1.3) ADDITIONAL VALIDATION
 
 
 		if($error == ""){
@@ -247,8 +248,8 @@ function wp_quest_rules(){
 				<td>
 					<select name="rule-type" id="rule-type">
 						<option value="visit">Visits</option>
-						<option value="comment" disabled>Comments - Coming Soon</option>
-						<option value="login" disabled>Logins - Coming</option>
+						<option value="comment">Comments</option>
+						<option value="login">Logins</option>
 					</select><br />
 					<span class="description">Please select the type of rule you would like to add</span>
 				</td>
@@ -274,7 +275,7 @@ function wp_quest_rules(){
 						<?php } ?>
 						</optgroup>
 					</select><br />
-					<span class="description">Please select the page you wish this rule to be applied to. For example, setting a Visit rule on Homepage will trigger victory when a user visits a homepage.</span>
+					<span class="description">Please select the page you wish this rule to be applied to. For example, setting a Visit rule on Homepage will trigger victory when a user visits a homepage.<br />Please note, setting a page has no bearing on Login type rules.</span>
 				</td>
 			</tr>
 			 <tr>
@@ -519,7 +520,7 @@ function wp_quest_levels(){
 function wp_quest_settings(){
 	//Overall settings
 		//Display - Which elements to display on full
-		//TODO: JS pop up - Position, colour
+		//TODO (1.2): JS pop up customisation - Position, colour
 	?>
 	<h2>Settings</h2>
 	<h3>Display Settings</h3>
@@ -546,10 +547,10 @@ function wp_quest_settings(){
 		</table>
 		<p><input type="submit" value="Save Display Settings" class="button-primary" id="submit" name="submit"></p>
 	</form>
-	<!-- TODO: (1.1)
+	<!-- TODO: (1.2)
 	<h3>Notification Settings</h3>
 	<form id="popup-settings" method="post"  action="options.php">
-	<?php settings_fields( 'wpq-notification-group' ); ?>
+	<?php //settings_fields( 'wpq-notification-group' ); ?>
 	<table class="form-table">
 
 			<tr>
@@ -557,18 +558,18 @@ function wp_quest_settings(){
 
 				<td>
 					<select name="position" id="position">
-						<option value="0" <?php if(get_option('position') == 0){ echo "Selected"; } ?>>Do not display notifications</option>
-						<option value="1" <?php if(get_option('position') == 1){ echo "Selected"; } ?>>Top Left</option>
-						<option value="2" <?php if(get_option('position') == 2){ echo "Selected"; } ?>>Top Centre</option>
-						<option value="3" <?php if(get_option('position') == 3){ echo "Selected"; } ?>>Top Right</option>
+						<option value="0" <?php //if(get_option('position') == 0){ echo "Selected"; } ?>>Do not display notifications</option>
+						<option value="1" <?php //if(get_option('position') == 1){ echo "Selected"; } ?>>Top Left</option>
+						<option value="2" <?php //if(get_option('position') == 2){ echo "Selected"; } ?>>Top Centre</option>
+						<option value="3" <?php //if(get_option('position') == 3){ echo "Selected"; } ?>>Top Right</option>
 
-						<option value="4" <?php if(get_option('position') == 4){ echo "Selected"; } ?>>Middle Left</option>
-						<option value="5" <?php if(get_option('position') == 5){ echo "Selected"; } ?>>Middle Centre</option>
-						<option value="6" <?php if(get_option('position') == 6){ echo "Selected"; } ?>>Middle Right</option>
+						<option value="4" <?php //if(get_option('position') == 4){ echo "Selected"; } ?>>Middle Left</option>
+						<option value="5" <?php //if(get_option('position') == 5){ echo "Selected"; } ?>>Middle Centre</option>
+						<option value="6" <?php //if(get_option('position') == 6){ echo "Selected"; } ?>>Middle Right</option>
 
-						<option value="7" <?php if(get_option('position') == 7){ echo "Selected"; } ?>>Bottom Left</option>
-						<option value="8" <?php if(get_option('position') == 8){ echo "Selected"; } ?>>Bottom Centre</option>
-						<option value="9" <?php if(get_option('position') == 9){ echo "Selected"; } ?>>Bottom Right</option>
+						<option value="7" <?php //if(get_option('position') == 7){ echo "Selected"; } ?>>Bottom Left</option>
+						<option value="8" <?php //if(get_option('position') == 8){ echo "Selected"; } ?>>Bottom Centre</option>
+						<option value="9" <?php //if(get_option('position') == 9){ echo "Selected"; } ?>>Bottom Right</option>
 					</select><br />
 					<span class="description">Please choose a position for your notification pop ups.</span>
 				</td>
@@ -577,7 +578,7 @@ function wp_quest_settings(){
 				<th><label for="dfq">Default text for Quest Completion</label></th>
 
 				<td>
-					<input type="text" name="dfq" id="dfq" value="<?php if(get_option('dfq') != ""){ echo get_option('dfq'); } else { echo "Quest Complete: "; } ?>" class="regular-text" /><br />
+					<input type="text" name="dfq" id="dfq" value="<?php //if(get_option('dfq') != ""){ echo get_option('dfq'); } else { echo "Quest Complete: "; } ?>" class="regular-text" /><br />
 					<span class="description">The text that will be displayed immediately before the Quest name when a User completes one.</span>
 				</td>
 			</tr>
@@ -585,7 +586,7 @@ function wp_quest_settings(){
 				<th><label for="dfl">Default text for Level Up</label></th>
 
 				<td>
-					<input type="text" name="dfl" id="dfl" value="<?php if(get_option('dfl') != ""){ echo get_option('dfl'); } else { echo "Level Up! You are now a "; } ?>" class="regular-text" /><br />
+					<input type="text" name="dfl" id="dfl" value="<?php //if(get_option('dfl') != ""){ echo get_option('dfl'); } else { echo "Level Up! You are now a "; } ?>" class="regular-text" /><br />
 					<span class="description">The text that will be displayed immediately before the level name when a User levels up.</span>
 				</td>
 			</tr>
@@ -629,23 +630,19 @@ function wordpress_quest_display($options = array(), $user = "current", $fallbac
 	}
 
 	if ($userID) { 
-		//TODO
 		//Fetch database rows related to this User ID
 		$user_quest_tablename = $wpdb->prefix.'wp_quest_user_quests';
 		$user_level_tablename = $wpdb->prefix.'wp_quest_user_levels';
 		$quest_tablename = $wpdb->prefix.'wp_quest_quests';
 		$level_tablename = $wpdb->prefix.'wp_quest_levels';
-		//TODO: Make sure this are fetching MOST RECENT FIRST
 		$user_quest_data = $wpdb->get_results("SELECT * FROM $user_quest_tablename WHERE user = $userID ORDER BY time_completed DESC", ARRAY_A);
 		$user_level_data = $wpdb->get_row("SELECT * FROM $user_level_tablename WHERE user = $userID");
 		$current_level_id = $user_level_data->level;
 		$user_current_level = $wpdb->get_row("SELECT * FROM $level_tablename WHERE id = $current_level_id");
 		$current_xp = $user_level_data->current_xp;
-		//TODO: Ensure this is fetching LOWEST XP REQ FIRST
 		$user_next_level = $wpdb->get_row("SELECT * FROM $level_tablename WHERE xp_req > $current_xp ORDER BY xp_req ASC");
 		$distance = $user_next_level->xp_req - $current_xp;
 		
-		//TODO
 		//Get default options
 		$defaults = array(
 		'user_level' => get_option('level'),
@@ -660,7 +657,7 @@ function wordpress_quest_display($options = array(), $user = "current", $fallbac
 		$to_show = array_merge($defaults, $options);
 
 		//Display the widget!
-		//TODO: Fallbacks for what happens if they are logged in but have nothing so far.
+		//TODO (1.2): Fallbacks for what happens if they are logged in but have nothing so far.
 		echo $before_widget;
 			echo '<div class="wordpress-quest">';
 				echo $before_title;
@@ -696,7 +693,7 @@ function wordpress_quest_display($options = array(), $user = "current", $fallbac
 					echo '</div>';
 				}
 				if($to_show['recent-quest']){
-					//TODO: 1.1 Add option to modify this number, perhaps remove last-quest and quest all together and just pass a number for how many quests to show (Could be set to 999 or 1 or anything inbetween)
+					//TODO: 1.2 Add option to modify this number, perhaps remove last-quest and quest all together and just pass a number for how many quests to show (Could be set to 999 or 1 or anything inbetween)
 					echo '<div class="wp_quest_current_user_recent_quests"><span class="wp_quest_display_section_title">Recent Quests: </span>';
 						$i = 1;
 						foreach($user_quest_data as $uqd){
@@ -726,7 +723,7 @@ function wordpress_quest_display($options = array(), $user = "current", $fallbac
 
 }
 wp_register_sidebar_widget('wp_quest_display', 'WordPress Quest Display', 'wordpress_quest_display', array('description' => "Displays Quest status to the current user."));
-//TODO (1.1): Make better widget controls where the user can set this widget to behave differently to default if they want to
+//TODO (1.2): Make better widget controls where the user can set this widget to behave differently to default if they want to
 register_widget_control('wp_quest_display', function(){ echo 'This widget uses the options set in <a href="'.get_bloginfo('url').'/wp-admin/admin.php?page=wp-quest-settings">WordPress Quest Settings</a>';});
 
 function add_wp_quest_javascript(){
@@ -740,14 +737,13 @@ function queue_wp_quest_script() {
 	wp_enqueue_script('wp_quest-funct', plugins_url('wp-quest-functions.js', __FILE__), array('jquery') );
 }    
 add_action('wp_enqueue_scripts', 'queue_wp_quest_script');
-
-/* TODO: (1.1) Quest Types 
+ 
 function wp_quest_checkers_login(){
 	wp_quest_checkers("login");
 }
 function wp_quest_checkers_comment(){
 	wp_quest_checkers("comment");
-} */
+} 
 function wp_quest_checkers_visit(){
 	wp_quest_checkers("visit");
 }
@@ -768,22 +764,32 @@ function wp_quest_checkers($type = "visit"){
 	$xp_increase = false;
 	$xp_val = 0;
 
+	
+
 	//Is this person even logged in? If not, do nothing.
-	if(is_user_logged_in()) {
+	if(is_user_logged_in() || $type = "login") {
+
 		//Check for rule completion
 			//Get current page and user
-			$current_page = $post->ID;
+			if($type != "login"){
+				$current_page = $post->ID;
+			} else {
+				$current_page = 0;
+			}
+			
 			$userID = $current_user->ID;
 			//Get user rules (Not Partials)
 			$completed_rules = "SELECT * FROM $user_rules_tablename WHERE user = $userID AND partial = 0";
 
+			
 			//Get rules (exclude ones we've got) for this page (or any) to check against
 			$rule_fetch = $wpdb->get_results("SELECT * FROM $rules_tablename WHERE (page = 0 OR page = $current_page) AND id NOT IN ('$completed_rules') AND type = \"$type\"", ARRAY_A);
 
 			//Update user rules
-				//Foreach rule			
+				//Foreach rule		
 				foreach($rule_fetch as $rf){
 					//If num > 0, look for it in users
+					
 					$rule = $rf['id'];
 					if($rf['num'] > 0){
 						$partial_rules = $wpdb->get_results("SELECT * FROM $user_rules_tablename WHERE user = $userID AND partial = '1' AND rule = $rule", ARRAY_A);	
@@ -792,8 +798,8 @@ function wp_quest_checkers($type = "visit"){
 							$this_user_rule = $partial_rules[0];
 							$new_partial_num = $this_user_rule['partial_num'] + 1;
 
-							//If this rule's new partial num = the requirement, remove partial
-							if($rf['num'] == $new_partial_num){
+							//If this rule's new partial num is over the requirement, remove partial
+							if($rf['num'] <= $new_partial_num){
 								$wpdb->update( 
 									$user_rules_tablename, 
 									array( 
@@ -870,7 +876,7 @@ function wp_quest_checkers($type = "visit"){
 				//Loop through rules
 				$i = 1;
 				$rules_completed = array();
-				//TODO: Make sure we haven't got this Quest already before doing all the below. Atm is adding lots of XP
+				//TODO (1.2): Make sure we haven't got this Quest already before doing all the below. Atm is adding lots of XP
 				while($i < 11){
 					//echo $qf['name']." - ";
 					if($qf['rule_'.$i] > 0){
@@ -979,12 +985,31 @@ function wp_quest_checkers($type = "visit"){
 		}
 	} else {
 		//Not logged in, do nothing for now
-		//TODO: (One day) Set a popup letting non-logged in people know what they could have won?
+		//TODO: (1.4) Set a popup letting non-logged in people know what they could have won? (Only if not login type check)
 	}
 
 }
-//TODO: (1.1) Quest type: add_action('wp_login', 'wp_quest_checkers_login');
-//TODO: (1.1) Quest type: add_action('comment_post', 'wp_quest_checkers_comment');
+
+add_action('wp_login', 'wp_quest_checkers_login');
+add_action('comment_post', 'wp_quest_checkers_comment');
 add_action('wp_head', 'wp_quest_checkers_visit');
+
+// Add user id to body classes
+add_filter('body_class','my_class_names');
+function my_class_names($classes) {
+	global $current_user;
+	get_currentuserinfo();
+	
+	// add 'class-name' to the $classes array
+	if(is_user_logged_in()){
+		$userID = $current_user->ID;
+		$classes[] = 'user-'.$userID;
+	}
+	
+	// return the $classes array
+	return $classes;
+}
+
+//TODO: (1.4) - Integration - Cubepoints? Credly?
 
 ?>
